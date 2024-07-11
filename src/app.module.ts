@@ -6,6 +6,8 @@ import { User } from './user/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { BoardModule } from './board/board.module';
 import { Board } from './board/entities/board.entity';
+import { TaskModule } from './task/task.module';
+import { Task } from './task/entities/task.entity';
 
 
 
@@ -24,10 +26,11 @@ import { Board } from './board/entities/board.entity';
     username:process.env.DB_USERNAME,
     password:process.env.DB_PASSWORD,
     database:process.env.DB_NAME,
-    entities:[User,Board],
+    entities:[User,Board,Task],
     synchronize:false,
   }),
-    BoardModule],
+    BoardModule,
+    TaskModule],
 
 })
 export class AppModule {}

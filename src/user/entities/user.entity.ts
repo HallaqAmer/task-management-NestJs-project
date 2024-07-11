@@ -1,4 +1,5 @@
 import { Board } from 'src/board/entities/board.entity';
+import { Task } from 'src/task/entities/task.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity('users')
@@ -21,5 +22,8 @@ export class User {
 
     @OneToMany(() => Board, board => board.user)
     boards: Board[];
+
+    @OneToMany(() => Task, task => task.user)
+    tasks: Task[];
 
 }
