@@ -22,6 +22,11 @@ export class TaskService {
     return this.taskRepository.findOneBy({id});
   }
 
+  async getTasksByUserId(userId: number): Promise<Task[]> {
+    return await this.taskRepository.find({where:{user:{id:userId}},
+    relations:['user']})
+  }
+
   update(id: number, updateTaskDto: UpdateTaskDto) {
     return `This action updates a #${id} task`;
   }

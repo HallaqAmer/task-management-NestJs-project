@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, ParseIntPipe } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -7,21 +7,14 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
-  @Post()
-  async create(@Body() createBoardDto: CreateBoardDto,@Req() req: Request) {
-    console.log(req)
-    const user={}
-    return this.boardService.createNewBoard(createBoardDto,user);
-  }
-
   @Get(':id')
-  getUserBoards(@Param('id') id: string) {
-    return this.boardService.getBoardById(+id);
+  async getBoardById(@Param('id') id: string) {
+    return await this.boardService.getBoardById(+id);
   }
 
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.boardService.remove(+id);
+  @Get(':id/tasks')
+  async getBoardTasks(@Param('id',ParseIntPipe) id: number) {
+    return await this.boardService.getBoardTasks(id);
   }
+
 }
