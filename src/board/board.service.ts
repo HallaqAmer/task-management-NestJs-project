@@ -5,27 +5,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
+import { Task } from 'src/task/entities/task.entity';
 
 @Injectable()
 export class BoardService {
-  constructor(@InjectRepository(Board)
-    private readonly boardRepository: Repository<Board>){
+  constructor(
+    @InjectRepository(Board) private readonly boardRepository: Repository<Board>,
+    @InjectRepository(Task) private readonly taskRepository: Repository<Task>
+  ){}
 
-    }
-    createNewBoard(createBoardDto: CreateBoardDto,user: any):Promise<Board> {
-      const board = this.boardRepository.create({ ...createBoardDto, user });
-      return this.boardRepository.save(board);
+  async getBoardById(id: number) {
+    return await this.boardRepository.findOneBy({id})
   }
 
-  getBoardById(id: number) {
-    return this.boardRepository.findOneBy({id})
+  async getBoardsByUserId(userId: number): Promise<Board[]> {
+    return await this.boardRepository.find({where:{user:{id:userId}},
+    relations:['user']})
   }
 
-  update(id: number, updateBoardDto: UpdateBoardDto) {
-    return `This action updates a #${id} board`;
+  async getBoardTasks(id:number):Promise<Task[]> {
+
+    return await this.taskRepository.find({
+      where: {board:{id:id}},
+      relations:['board']
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} board`;
-  }
 }
