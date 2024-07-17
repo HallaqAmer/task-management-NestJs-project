@@ -1,4 +1,4 @@
-import { Injectable} from '@nestjs/common';
+import { forwardRef, Inject, Injectable} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ export class UserService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Board) private readonly boardRepository: Repository<Board>,
-        private readonly boardService:BoardService,
+        @Inject(forwardRef(() => BoardService)) private readonly boardService:BoardService,
         private readonly taskService:TaskService
 
     ){}

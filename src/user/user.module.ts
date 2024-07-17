@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,7 +8,7 @@ import { BoardModule } from 'src/board/board.module';
 import { TaskModule } from 'src/task/task.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User,Board]),BoardModule,TaskModule],
+  imports:[TypeOrmModule.forFeature([User,Board]),TaskModule,forwardRef(() => BoardModule)],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
