@@ -4,19 +4,20 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { Repository } from 'typeorm';
+import { Board } from 'src/board/entities/board.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class TaskService {
 
   constructor(@InjectRepository(Task) private readonly taskRepository:Repository<Task>) {}
 
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  async createNewTask(createTaskDto: CreateTaskDto,board:Board,user:User): Promise<Task> {
+    const newTask=  this.taskRepository.create({...createTaskDto,board,user})
+    return await this.taskRepository.save(newTask);
   }
 
-  findAll() {
-    return `This action returns all task`;
-  }
+  
 
   getTaskById(id: number) {
     return this.taskRepository.findOneBy({id});
@@ -31,7 +32,7 @@ export class TaskService {
     return `This action updates a #${id} task`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async removeTaskById(id: number) {
+    return await this.taskRepository.delete({id})
   }
 }
