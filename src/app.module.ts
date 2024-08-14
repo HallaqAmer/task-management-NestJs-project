@@ -2,12 +2,11 @@ import { Module } from '@nestjs/common';
 import { UserModule} from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { BoardModule } from './board/board.module';
-import { Board } from './board/entities/board.entity';
 import { TaskModule } from './task/task.module';
-import { Task } from './task/entities/task.entity';
+import { AppController } from './app.controller';
+
 
 
 
@@ -32,6 +31,8 @@ import { Task } from './task/entities/task.entity';
   }),
     BoardModule,
     TaskModule],
+  controllers: [AppController],
+
 
 })
 export class AppModule {}

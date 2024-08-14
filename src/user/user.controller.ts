@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateBoardDto } from 'src/board/dto/create-board.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('api/users')
 export class UserController {
@@ -17,11 +18,12 @@ export class UserController {
 
     }
 
+    @UseGuards(AuthGuard)
     @Get(':userid')
-    async getUserById(@Param('userid',ParseIntPipe) userid:number):Promise<User> {
-
+    async getUserById(@Param('userid',ParseIntPipe) userid:number,@Req() req,@Res() res){
+        console.log(req.headers.authorization)
         try {
-            return await this.userService.getUserById(userid)
+            res.status(200).json(await this.userService.getUserById(userid)) 
 
         }
         catch(err) {
@@ -31,6 +33,7 @@ export class UserController {
 
     }
 
+    @UseGuards(AuthGuard)
     @Get(':userid/boards')
     async getUserBoards(@Param('userid',ParseIntPipe) userid:number,@Req() req,@Res() res) {
 
@@ -38,6 +41,7 @@ export class UserController {
 
     }
 
+    @UseGuards(AuthGuard)
     @Post(':userid/boards')
     async create(
         @Param('userid',ParseIntPipe) userid:number,
