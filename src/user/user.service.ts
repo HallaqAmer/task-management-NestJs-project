@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateBoardDto } from 'src/board/dto/create-board.dto';
 import { Board } from 'src/board/entities/board.entity';
-import { BoardService } from 'src/board/board.service';
 import { TaskService } from 'src/task/task.service';
 
 @Injectable()
@@ -16,9 +15,7 @@ export class UserService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Board) private readonly boardRepository: Repository<Board>,
-        @Inject(forwardRef(() => BoardService)) private readonly boardService:BoardService,
         private readonly taskService:TaskService
-
     ){}
     
 
@@ -44,17 +41,6 @@ export class UserService {
         })
 
         return await this.userRepository.save(newUser)
-    }
-
-    async createNewBoard(userid: number,createBoardDto: CreateBoardDto):Promise<Board> {
-        const user= await this.getUserById(userid);
-        const board =  this.boardRepository.create({ ...createBoardDto, user });
-        return await this.boardRepository.save(board);
-    }
-
-    async getUserBoards(userid:number) {
-        const boards= await this.boardService.getBoardsByUserId(userid);
-        return boards;
     }
 
     async getUserTasks(userid:number) {
