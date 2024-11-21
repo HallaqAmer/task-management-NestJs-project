@@ -34,16 +34,17 @@ export class BoardController {
   }
 
   @Get(':id/tasks')
-  async getBoardTasks(@Param('id',ParseIntPipe) id: number) {
-    return await this.boardService.getBoardTasks(id);
+  async getBoardTasks(@Param('id',ParseIntPipe) boardId: number, @Res() res) {
+    res.status(200).json(await this.boardService.getBoardTasks(boardId))
   }
 
   @Post(':id/tasks')
   async createBoardTask(
-    @Param('id',ParseIntPipe) id: number, 
+    @Req() req,
+    @Res() res,
+    @Param('id',ParseIntPipe) boardId: number, 
     @Body() createTaskDto:CreateTaskDto) {
-      
-    return await this.boardService.createBoardTask(createTaskDto,id);
-  }
-
+      const userId=req.user.sub;
+      res.status(200).json(await this.boardService.createBoardTask(createTaskDto,boardId,userId))
+    }
 }

@@ -34,20 +34,19 @@ export class BoardService {
     return await this.boardRepository.save(board);
   }
 
-  async getBoardTasks(id:number):Promise<Task[]> {
+  async getBoardTasks(boardid:number):Promise<Task[]> {
 
     return await this.taskRepository.find({
-      where: {board:{id:id}},
+      where: {board:{id:boardid}},
       relations:['board']
     })
   }
 
-  async createBoardTask(_createUserDto:CreateTaskDto,userid:number):Promise<Task> {
+  async createBoardTask(createUserDto:CreateTaskDto,boardId:number,userId:number):Promise<Task> {
 
-    const board= await this.getBoardById(userid)
-    const user = await this.userRepository.findOne({where: {id:userid}});
-    // const user=req.user;
-    const newTask= await this.taskService.createNewTask(_createUserDto,board,user);
+    const board= await this.getBoardById(boardId)
+    const user = await this.userRepository.findOne({where: {id:userId}});
+    const newTask= await this.taskService.createNewTask(createUserDto,board,user);
     return newTask
 
   }
