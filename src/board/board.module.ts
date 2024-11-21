@@ -11,9 +11,9 @@ import { User } from 'src/user/entities/user.entity';
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Board,Task,User]),TaskModule],
+  imports:[TypeOrmModule.forFeature([Board,Task,User])],
   controllers: [BoardController],
-  providers: [BoardService],
+  providers: [BoardService,TaskService],
   exports:[BoardService]
 })
 export class BoardModule {}

@@ -17,8 +17,6 @@ export class TaskService {
     return await this.taskRepository.save(newTask);
   }
 
-  
-
   getTaskById(id: number) {
     return this.taskRepository.findOneBy({id});
   }
@@ -28,8 +26,8 @@ export class TaskService {
     relations:['user']})
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async updateTaskById(id: number, updateTaskDto: UpdateTaskDto) {
+    return await this.taskRepository.update({id},{...updateTaskDto})
   }
 
   async removeTaskById(id: number) {

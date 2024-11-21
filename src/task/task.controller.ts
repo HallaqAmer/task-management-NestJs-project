@@ -1,24 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards, Res } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('api/tasks')
+@UseGuards(AuthGuard)
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.getTaskById(+id);
+  async getTaskById(@Param('id',ParseIntPipe) taskId: number, @Res() res) {
+    res.status(200).json(await this.taskService.getTaskById(taskId))
+    
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(+id, updateTaskDto);
+  async updateTaskById(
+    @Res() res,
+    @Param('id',ParseIntPipe) taskId: number,
+    @Body() updateTaskDto: UpdateTaskDto) {
+    res.status(200).json(await this.taskService.updateTaskById(taskId, updateTaskDto))
   }
 
   @Delete(':id')
-  removeTaskById(@Param('id',ParseIntPipe) id: number) {
-    return this.taskService.removeTaskById(id);
+  async removeTaskById(@Param('id',ParseIntPipe) id: number, @Res() res) {
+    res.status(200).json(await this.taskService.removeTaskById(id))
   }
 }

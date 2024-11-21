@@ -48,11 +48,8 @@ export class UserService {
         return tasks;
     }
 
-    async updateUserById(id:number,_updateUserDto: UpdateUserDto) {
-        
+    async updateUserById(id:number,_updateUserDto: UpdateUserDto) {  
         return await this.userRepository.update({id},{..._updateUserDto})
-
-
         }
     
     async deleteUserById(id: number): Promise<void> {
