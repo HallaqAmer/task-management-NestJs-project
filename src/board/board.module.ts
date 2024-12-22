@@ -7,9 +7,10 @@ import { Task } from 'src/task/entities/task.entity';
 import { TaskService } from 'src/task/task.service';
 import { User } from 'src/user/entities/user.entity';
 import { UserModule } from 'src/user/user.module';
+import { TaskModule } from 'src/task/task.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Board, Task, User]), UserModule],
+  imports: [TypeOrmModule.forFeature([Board]), UserModule, TaskModule],
   controllers: [BoardController],
   providers: [BoardService, TaskService],
   exports: [BoardService],
